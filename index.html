@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marile Descoperiri ale Europenilor (II). Călători și Călătorii</title>
+    <style>
+        :root {
+            --primary-color: #1b4965;
+            --secondary-color: #62b6cb;
+            --accent-color: #e63946;
+            --light-bg: #edf6f9;
+            --card-bg: #ffffff;
+            --text-color: #2b2d42;
+            --success: #2a9d8f;
+            --error: #e63946;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* BARĂ DE NAVIGARE FIXĂ (MENU) ACCESIBILĂ */
+        nav.top-nav {
+            position: sticky;
+            top: 0;
+            background-color: var(--primary-color);
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 12px 20px;
+            flex-wrap: wrap;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9em;
+            padding: 8px 14px;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        nav.top-nav a:hover {
+            background-color: var(--secondary-color);
+            color: #0f2537;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        /* HEADER CU TITLU COMPLET ALB */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #0f2537);
+            color: #ffffff;
+            padding: 30px 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.2em;
+            color: #ffffff;
+        }
+
+        header h2 {
+            margin: 0;
+            font-size: 1.5em;
+            color: #ffffff;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .subtitle-box {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border-left: 6px solid var(--primary-color);
+            scroll-margin-top: 80px;
+        }
+
+        .section-card h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 8px;
+            margin-top: 0;
+        }
+
+        h3 {
+            color: #2c5282;
+            margin-top: 15px;
+        }
+
+        /* Exercitii & Componente Interactive */
+        .exercise-container {
+            background: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+
+        .badge {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .interactive-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+            margin-top: 15px;
+        }
+
+        .interactive-btn:hover {
+            background-color: #0f2537;
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .feedback.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        /* Flashcards */
+        .flashcard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .flashcard {
+            background: white;
+            border: 2px solid var(--secondary-color);
+            border-radius: 8px;
+            height: 140px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 6px;
+        }
+
+        .flashcard-front {
+            background-color: #e0f2fe;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .flashcard-back {
+            background-color: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        /* SELECT / CASETE DERULANTE STYLING */
+        select {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid #a0aec0;
+            background-color: white;
+            font-size: 0.95em;
+            margin: 0 4px;
+            transition: all 0.2s ease;
+        }
+
+        select.hide-arrow {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: none !important;
+            padding-right: 12px !important;
+            border-color: var(--primary-color);
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* DRAG AND DROP STYLES */
+        .drag-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+            min-height: 50px;
+        }
+
+        .drag-item {
+            background: white;
+            border: 2px solid var(--secondary-color);
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: grab;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .drag-item:active {
+            cursor: grabbing;
+        }
+
+        .drag-item.dragging {
+            opacity: 0.5;
+            background: #e2e8f0;
+        }
+
+        .drag-handle {
+            color: var(--secondary-color);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* STILURI SPECIALE EXERCIȚIUL 3.4 DRAG & DROP JURNAL */
+        .journal-drop-zone {
+            background-color: #ffffff;
+            border: 2px dashed #0284c7;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 120px;
+            margin-top: 10px;
+        }
+
+        .journal-pool-zone {
+            background-color: #e2e8f0;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .option-chip {
+            background: white;
+            border: 2px solid #cbd5e1;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-chip:hover {
+            border-color: var(--secondary-color);
+            background: #f0f9ff;
+        }
+
+        .option-chip.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            scroll-margin-top: 80px;
+        }
+
+        .info-card {
+            padding: 15px;
+            border-radius: 8px;
+            color: white;
+        }
+
+        .info-dict { background-color: #0284c7; }
+        .info-method { background-color: #7c3aed; }
+        .info-remember { background-color: #d97706; }
+
+        .test-q {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- BARA DE NAVIGARE SUS - CONECTATĂ LA FIECARE SUBCAPITOL -->
+<nav class="top-nav">
+    <a href="#cap3-1">3.1. Cristofor Columb</a>
+    <a href="#cap3-2">3.2. Fernando Magellan</a>
+    <a href="#cap3-3">3.3. Alți mari exploratori</a>
+    <a href="#dictionar">Dicționar & De Reținut</a>
+    <a href="#evaluare">Test Evaluativ (10 Ex)</a>
+</nav>
+
+<div class="container">
+
+    <!-- HEADER CU TITLUL ALB COMPLET -->
+    <header>
+        <h1>MARILE DESCOPERIRI ALE EUROPENILOR (II)</h1>
+        <h2>CĂLĂTORI ȘI CĂLĂTORII</h2>
+        <div class="subtitle-box">
+            Cât de departe au ajuns navigatorii europeni?
+        </div>
+    </header>
+
+    <!-- SUBPARAGRAF 3.1 -->
+    <div class="section-card" id="cap3-1">
+        <h2>3.1. Cristofor Columb</h2>
+        
+        <p>De origine din Genova, oraș ce reprezenta o adevărată putere maritimă în Evul Mediu, <strong>Cristofor Columb</strong> și-a început cariera ca marinar pe corăbiile ce străbăteau Marea Mediterană. Influențat de ideile geografului Toscanelli, Columb era convins că, navigând către vest, peste Oceanul Atlantic, poate fi descoperită o nouă rută către India.</p>
+
+        <p>El a reușit să obțină sprijinul regilor Spaniei, <strong>Ferdinand de Aragon</strong> și <strong>Isabela de Castilia</strong>. În anul <strong>1492</strong>, Cristofor Columb a plecat din portul spaniol Palos, îndreptându-se către apus, cu trei corăbii: <i>Santa Maria</i>, <i>Pinta</i> și <i>Niña</i>. La finalul călătoriei, acesta a descoperit insula pe care a numit-o <strong>San Salvador</strong>, din Arhipelagul Bahamas (în America Centrală).</p>
+
+        <p>În timpul primei sale călătorii, Cristofor Columb a mai explorat insulele Cuba și Haiti. Convins că a ajuns în Asia, el a numit teritoriile descoperite <i>Indii</i>, iar pe locuitorii acestora, <i>indieni</i>. Columb a efectuat patru călătorii peste Atlantic, iar teritoriile explorate au intrat sub stăpânirea Spaniei.</p>
+
+        <!-- EXERCIȚIU 1.1 -->
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 1.1 | Găsește Intrusul</span>
+            <h3>🔍 Călătoria lui Cristofor Columb</h3>
+            <p>Selectează opțiunea care <strong>NU</strong> are legătură cu prima expediție a lui Columb (1492):</p>
+            <div class="options-grid" id="ex1-options"></div>
+            <button class="interactive-btn" onclick="checkEx1()">Verifică Răspunsul</button>
+            <div class="feedback" id="ex1-feedback"></div>
+        </div>
+
+        <!-- EXERCIȚIU 1.2 -->
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 1.2 | Analiză de document (Sursa A)</span>
+            <h3>📜 „Jurnalul lui Cristofor Columb”</h3>
+            <p><i>„Oamenii de pe corăbii văzură alte semne de pământ și un trunchi de mărăcine plin cu fructe roșii. Pământul îl văzu mai întâi un marinar care se numea Rodrigo de Triana... Coborâră toate velele și înaintară numai cu vela mare, fără cele mici, așteptând până la ziuă, într-o vineri, când ajunseră pe o insuliță din Bahamas.”</i></p>
+            <p>1. Cine a fost primul marinar care a văzut pământul? <select class="auto-hide" id="ex1_2_1"></select></p>
+            <p>2. În ce arhipelag se afla insula pe care au debarcat? <select class="auto-hide" id="ex1_2_2"></select></p>
+            <button class="interactive-btn" onclick="checkEx1_2()">Verifică Răspunsul</button>
+            <div class="feedback" id="ex1_2-feedback"></div>
+        </div>
+
+        <!-- EXERCIȚIU 1.3 -->
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 1.3 | Verificare Noțiuni</span>
+            <h3>🧩 Completează afirmațiile despre Columb</h3>
+            <p>1. Orașul natal al lui Cristofor Columb a fost <select class="auto-hide" id="fill1_1"></select>.</p>
+            <p>2. Suveranii care i-au susținut expediția au fost regele Ferdinand de Aragon și regina <select class="auto-hide" id="fill1_2"></select>.</p>
+            <p>3. Prima insulă descoperită în 1492 a fost numită <select class="auto-hide" id="fill1_3"></select>.</p>
+            <button class="interactive-btn" onclick="checkEx1_3()">Verifică</button>
+            <div class="feedback" id="ex1_3-feedback"></div>
+        </div>
+
+        <!-- EXERCIȚIU 1.4 -->
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 1.4 | Corăbiile lui Columb</span>
+            <h3>⛵ Flota spaniolă din 1492</h3>
+            <p>Asociază numărul total de călătorii efectuate de Columb peste Atlantic cu denumirea celor 3 corăbii ale sale:</p>
+            <p>Columb a efectuat în total <select class="auto-hide" id="ex1_4_1"></select> călătorii, folosind în prima expediție corăbiile Santa Maria, Niña și <select class="auto-hide" id="ex1_4_2"></select>.</p>
+            <button class="interactive-btn" onclick="checkEx1_4()">Verifică</button>
+            <div class="feedback" id="ex1_4-feedback"></div>
+        </div>
+
+        <!-- EXERCIȚIU 1.5 -->
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 1.5 | Adevărat / Fals</span>
+            <h3>⚡ Verifică afirmațiile istorice</h3>
+            <p>1. Columb știa că a descoperit un nou continent numit America: <select class="auto-hide" id="ex1_5_1"></select></p>
+            <p>2. Insulele Cuba și Haiti au fost explorate în timpul primei călătorii: <select class="auto-hide" id="ex1_5_2"></select></p>
+            <p>3. Columb a fost influențat de ideile geografului Toscanelli: <select class="auto-hide" id="ex1_5_3"></select></p>
+            <button class="interactive-btn" onclick="checkEx1_5()">Verifică</button>
+            <div class="feedback" id="ex1_5-feedback"></div>
+        </div>
+    </div>
+
+    <!-- SUBPARAGRAF 3.2 -->
+    <div class="section-card" id="cap3-2">
+        <h2>3.2. Fernando Magellan</h2>
+        
+        <p>Navigator portughez experimentat, <strong>Fernando Magellan</strong> era încredințat că există posibilitatea ca, ocolind continentul american pe la sud, să se poată asigura legătura cu insulele din sud-estul Asiei.</p>
+
+        <p>Intrat în serviciul Spaniei, el a organizat o expediție formată din <strong>cinci corăbii</strong>, cu care a început, în anul <strong>1519</strong>, călătoria ce avea să îl poarte în jurul lumii. Expediția condusă de Magellan a traversat Oceanul Atlantic navigând spre sud. Astfel au fost descoperite Arhipelagul Țara de Foc și strâmtoarea ce azi poartă numele navigatorului – <strong>Strâmtoarea Magellan</strong>.</p>
+
+        <p>Apoi, corăbiile europene au străbătut Oceanul Pacific, ajungând în Insulele Filipine (Asia de Sud-Est). După moartea lui Fernando Magellan, doar una dintre corăbiile sale (<i>Victoria</i>) a reușit să revină în Europa, în anul <strong>1522</strong>. Prin această călătorie a fost realizată prima <strong>circumnavigație</strong> a Terrei.</p>
+
+        <!-- EXERCIȚIU 2.1 -->
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 2.1 | Carduri Memorie</span>
+            <h3>🎴 Călătoria în jurul lumii</h3>
+            <p>Apasă pe fiecare card pentru a vedea detaliile:</p>
+            <div class="flashcard-grid">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">Cu câte corăbii a plecat Magellan în 1519?</div>
+                        <div class="flashcard-back">5 corăbii!<br>Doar una singură (Victoria) s-a întors în Spania în 1522.</div>
+                    </div>
+                </div>
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">Unde a murit Fernando Magellan?</div>
+                        <div class="flashcard-back">În Insulele Filipine,<br>în timpul confruntărilor cu băștinașii.</div>
+                    </div>
+                </div>
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">Ce reprezintă prima circumnavigație?</div>
+                        <div class="flashcard-back">Ocolul complet al Pământului pe cale maritimă (1519-1522).</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXERCIȚIU 2.2 -->
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 2.2 | Analiză Sursa A (Antonio Pigafetta)</span>
+            <h3>📜 Mărturia unui supraviețuitor</h3>
+            <p><i>„Ne-am întors 18 oameni cu doar o singură corăbie dintre cele cinci cu care am plecat. Am descoperit mirodenii, trestie de zahăr și perle. Am făcut înconjurul lumii, căci plecând către vest, am revenit în Spania prin est.”</i></p>
+            <p><strong>1. Câți oameni s-au întors la finalul primei circumnavigații?</strong></p>
+            <div id="ex2_2_q1"></div>
+            <p style="margin-top:15px;"><strong>2. Ce direcție de navigație au urmat inițial la plecare?</strong></p>
+            <div id="ex2_2_q2"></div>
+            <button class="interactive-btn" onclick="checkEx2_2()">Verifică Răspunsurile</button>
+            <div class="feedback" id="ex2_2-feedback"></div>
+        </div>
+
+        <!-- EXERCIȚIU 2.3 -->
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 2.3 | Reconstituirea rutei lui Magellan</span>
+            <h3>🗺️ De la Atlantic la Pacific</h3>
+            <p>Completează punctele geografice străbătute de flota lui Magellan:</p>
+            <p>Plecând din Spania, flota a traversat Oceanul <select class="auto-hide" id="ex2_3_1"></select>, a ocolit sudul Americii prin strâmtoarea Magellan, a traversat Oceanul <select class="auto-hide" id="ex2_3_2"></select> și a ajuns în Insulele <select class="auto-hide" id="ex2_3_3"></select>.</p>
+            <button class="interactive-btn" onclick="checkEx2_3()">Verifică Traseul</button>
+            <div class="feedback" id="ex2_3-feedback"></div>
+        </div>
+
+        <!-- EXERCIȚIU 2.4 -->
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 2.4 | Descoperiri Geografice</span>
+            <h3>🏔️ Arhipelagul din sudul Americii</h3>
+            <p>Ce arhipelag important a fost descoperit la trecerea prin sudul continentului american?</p>
+            <div id="ex2_4_options"></div>
+            <button class="interactive-btn" onclick="checkEx2_4()">Verifică Opțiunea</button>
+            <div class="feedback" id="ex2_4-feedback"></div>
+        </div>
+    </div>
+
+    <!-- SUBPARAGRAF 3.3 -->
+    <div class="section-card" id="cap3-3">
+        <h2>3.3. Amerigo Vespucci, Giovanni da Verrazzano, Henry Hudson</h2>
+        
+        <p>Continentul descoperit de Columb a fost numit <strong>America</strong>, după numele navigatorului <strong>Amerigo Vespucci</strong>. Acesta a explorat, între anii 1499 și 1504, teritorii din America de Sud care fac parte azi din statele Argentina, Brazilia, Uruguay.</p>
+
+        <p>În 1524, <strong>Giovanni da Verrazzano</strong> a cercetat, în numele Franței, țărmul estic al Americii de Nord. După aproape un secol, <strong>Henry Hudson</strong> a continuat explorarea teritoriilor nord-americane – zona actualului oraș New York, Golful Hudson și Fluviul Hudson –, în căutarea unui pasaj maritim nordic care să asigure legătura dintre Europa și Asia.</p>
+
+        <!-- EXERCIȚIU 3.1 -->
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 3.1 | Drag & Drop Axa Timpului</span>
+            <h3>⏰ Ordonează cronologic explorările din America!</h3>
+            <p>Trage cardurile de mai jos pentru a le pune în ordinea cronologică corectă (de sus în jos):</p>
+            <div class="drag-container" id="drag-list"></div>
+            <button class="interactive-btn" onclick="checkDragOrder()">Verifică Ordinea Cronologică</button>
+            <div class="feedback" id="drag-feedback"></div>
+        </div>
+
+        <!-- EXERCIȚIU 3.2 -->
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 3.2 | Asocieri Exploratori și Zone</span>
+            <h3>🌍 Cine ce a explorat?</h3>
+            <p>1. Amerigo Vespucci (1499-1504) ➔ <select class="auto-hide" id="ex3_2_1"></select></p>
+            <p>2. Giovanni da Verrazzano (1524) ➔ <select class="auto-hide" id="ex3_2_2"></select></p>
+            <p>3. Henry Hudson (sec. XVII) ➔ <select class="auto-hide" id="ex3_2_3"></select></p>
+            <button class="interactive-btn" onclick="checkEx3_2()">Verifică Asocierile</button>
+            <div class="feedback" id="ex3_2-feedback"></div>
+        </div>
+
+        <!-- EXERCIȚIU 3.3 -->
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 3.3 | În Slujba Cărui Stat / Scop?</span>
+            <h3>🎯 Căutarea pasajului nordic</h3>
+            <p>Selectează variantele corecte din text:</p>
+            <p>1. Giovanni da Verrazzano a cercetat țărmul Americii de Nord în numele <select class="auto-hide" id="ex3_3_1"></select>.</p>
+            <p>2. Henry Hudson căuta un pasaj maritim <select class="auto-hide" id="ex3_3_2"></select> spre Asia.</p>
+            <p>3. Zona actualului oraș New York a fost explorată de <select class="auto-hide" id="ex3_3_3"></select>.</p>
+            <button class="interactive-btn" onclick="checkEx3_3()">Verifică</button>
+            <div class="feedback" id="ex3_3-feedback"></div>
+        </div>
+
+        <!-- EXERCIȚIU 3.4 MODIFICAT: DRAG & DROP JURNAL CU FAPTE ISTORICE ȘI INTRUȘI -->
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 3.4 | Drag & Drop: Jurnalul Marinarului din 1492</span>
+            <h3>✍️ Reconstituie Jurnalul de pe corabia Santa Maria!</h3>
+            <p>Trage doar ideile <strong>corecte istoric</strong> în zona albă a Jurnalului și ordonează-le pentru a obține o relatare logică (de la plecare până la sosire). Atenție: <strong>există 2 variante greșite (intruși)</strong> pe care trebuie să le lași jos!</p>
+            
+            <p><strong>📖 Jurnalul Marinarului (Așază fragmentele aici):</strong></p>
+            <div class="drag-container journal-drop-zone" id="journal-drop-zone"></div>
+
+            <p style="margin-top: 15px;"><strong>📦 Banca de fragmente (Alege de aici):</strong></p>
+            <div class="drag-container journal-pool-zone" id="journal-pool-zone"></div>
+
+            <button class="interactive-btn" onclick="checkJournalDrop()">Verifică Jurnalul</button>
+            <div class="feedback" id="ex3_4-feedback"></div>
+        </div>
+    </div>
+
+    <!-- DICȚIONAR & REȚINUT -->
+    <div class="info-cards" id="dictionar">
+        <div class="info-card info-dict">
+            <h3>📖 Dicționar Istoric</h3>
+            <p><strong>Arhipelag:</strong> Grup sau lanț de insule, situate într-o mare sau într-un ocean.</p>
+            <p><strong>Circumnavigație:</strong> Călătorie pe mare în jurul unei insule, al unui continent sau al Terrei.</p>
+            <p><strong>Oceanografia:</strong> Studiul mărilor și oceanelor (aspecte biologice, chimice, fizice, geologice).</p>
+        </div>
+
+        <div class="info-card info-method">
+            <h3>💡 Metodă de Învățare</h3>
+            <p><strong>Diagrama:</strong> Se pot înscrie în centru numele exploratorului (ex: Cristofor Columb), iar pe spațiile laterale, regiunile descoperite de acesta (San Salvador, Cuba, Haiti, Bahamas).</p>
+        </div>
+
+        <div class="info-card info-remember">
+            <h3>📌 De Reținut</h3>
+            <ul>
+                <li>Cristofor Columb a realizat 4 călătorii peste Atlantic (a explorat America Centrală).</li>
+                <li>Expediția lui Magellan (1519-1522) a demonstrat practic că Pământul este rotund.</li>
+                <li>Continentul a fost numit America după Amerigo Vespucci.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- TEST EVALUATIV FINAL (10 ÎNTREBĂRI) -->
+    <div class="section-card" id="evaluare" style="margin-top: 30px; border-left-color: var(--accent-color);">
+        <h2>📝 Test Evaluativ Final (10 Exerciții)</h2>
+        <p>Verifică-ți cunoștințele din Lecția 3 rezolvând cele 10 întrebări de mai jos:</p>
+
+        <div id="quiz-container"></div>
+
+        <button class="interactive-btn" style="background-color: var(--accent-color);" onclick="checkQuiz()">Trimite Testul Evaluativ (10 Întrebări)</button>
+        <div class="feedback" id="quiz-feedback"></div>
+    </div>
+
+</div>
+
+<script>
+    function shuffle(array) {
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex != 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
+
+    function setupHideArrowListeners() {
+        document.querySelectorAll('select.auto-hide').forEach(select => {
+            select.addEventListener('change', function() {
+                if (this.value !== "") {
+                    this.classList.add('hide-arrow');
+                } else {
+                    this.classList.remove('hide-arrow');
+                }
+            });
+        });
+    }
+
+    // EXERCIȚIUL 1.1
+    const ex1Data = [
+        { text: "Plecarea din portul Palos cu 3 corăbii", correct: false },
+        { text: "Descoperirea insulei San Salvador (1492)", correct: false },
+        { text: "Sprijinul regilor Ferdinand și Isabela", correct: false },
+        { text: "Traversarea Mării Negre spre Constantinopol", correct: true }
+    ];
+    let selectedEx1 = null;
+
+    function initEx1() {
+        const container = document.getElementById('ex1-options');
+        container.innerHTML = '';
+        let shuffled = shuffle([...ex1Data]);
+        shuffled.forEach((opt) => {
+            let chip = document.createElement('div');
+            chip.className = 'option-chip';
+            chip.innerText = opt.text;
+            chip.onclick = () => {
+                document.querySelectorAll('#ex1-options .option-chip').forEach(c => c.classList.remove('selected'));
+                chip.classList.add('selected');
+                selectedEx1 = opt.correct;
+            };
+            container.appendChild(chip);
+        });
+    }
+
+    function checkEx1() {
+        const feedback = document.getElementById('ex1-feedback');
+        if (selectedEx1 === null) {
+            feedback.className = 'feedback incorrect';
+            feedback.innerText = 'Selectează mai întâi o opțiune!';
+            return;
+        }
+        if (selectedEx1 === true) {
+            feedback.className = 'feedback correct';
+            feedback.innerText = 'Corect! Traversarea Mării Negre NU a făcut parte din expediția lui Columb peste Atlantic.';
+        } else {
+            feedback.className = 'feedback incorrect';
+            feedback.innerText = 'Incorect! Aceasta este o informație reală despre călătoria lui Columb.';
+        }
+    }
+
+    // EXERCIȚIUL 1.2
+    function initEx1_2() {
+        let opts1 = shuffle(["Rodrigo de Triana", "Cristofor Columb", "Ferdinand de Aragon"]);
+        let opts2 = shuffle(["Bahamas", "Filipine", "Canare"]);
+
+        document.getElementById('ex1_2_1').innerHTML = '<option value="">-- alege --</option>' + opts1.map(o=>`<option value="${o}">${o}</option>`).join('');
+        document.getElementById('ex1_2_2').innerHTML = '<option value="">-- alege --</option>' + opts2.map(o=>`<option value="${o}">${o}</option>`).join('');
+    }
+
+    function checkEx1_2() {
+        let v1 = document.getElementById('ex1_2_1').value === "Rodrigo de Triana";
+        let v2 = document.getElementById('ex1_2_2').value === "Bahamas";
+
+        let fb = document.getElementById('ex1_2-feedback');
+        if(v1 && v2) {
+            fb.className = 'feedback correct';
+            fb.innerText = 'Excelent! Ai analizat corect fragmentul din Jurnalul lui Columb!';
+        } else {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Incorect. Releagă textul Sursa A!';
+        }
+    }
+
+    // EXERCIȚIUL 1.3
+    function initEx1_3() {
+        let options1 = shuffle(["Genova", "Venetia", "Madrid"]);
+        let options2 = shuffle(["Isabela de Castilia", "Elisabeta I", "Maria de Medici"]);
+        let options3 = shuffle(["San Salvador", "Cuba", "Haiti"]);
+
+        document.getElementById('fill1_1').innerHTML = '<option value="">-- alege --</option>' + options1.map(o=>`<option value="${o}">${o}</option>`).join('');
+        document.getElementById('fill1_2').innerHTML = '<option value="">-- alege --</option>' + options2.map(o=>`<option value="${o}">${o}</option>`).join('');
+        document.getElementById('fill1_3').innerHTML = '<option value="">-- alege --</option>' + options3.map(o=>`<option value="${o}">${o}</option>`).join('');
+    }
+
+    function checkEx1_3() {
+        let v1 = document.getElementById('fill1_1').value === "Genova";
+        let v2 = document.getElementById('fill1_2').value === "Isabela de Castilia";
+        let v3 = document.getElementById('fill1_3').value === "San Salvador";
+
+        let fb = document.getElementById('ex1_3-feedback');
+        if(v1 && v2 && v3) {
+            fb.className = 'feedback correct';
+            fb.innerText = 'Bravo! Toate datele despre Columb sunt corecte.';
+        } else {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Verifică din nou răspunsurile pe baza textului 3.1!';
+        }
+    }
+
+    // EXERCIȚIUL 1.4
+    function initEx1_4() {
+        let o1 = shuffle(["patru", "trei", "două"]);
+        let o2 = shuffle(["Pinta", "Victoria", "Trinidad"]);
+
+        document.getElementById('ex1_4_1').innerHTML = '<option value="">-- număr --</option>' + o1.map(o=>`<option value="${o}">${o}</option>`).join('');
+        document.getElementById('ex1_4_2').innerHTML = '<option value="">-- corabie --</option>' + o2.map(o=>`<option value="${o}">${o}</option>`).join('');
+    }
+
+    function checkEx1_4() {
+        let v1 = document.getElementById('ex1_4_1').value === "patru";
+        let v2 = document.getElementById('ex1_4_2').value === "Pinta";
+
+        let fb = document.getElementById('ex1_4-feedback');
+        if(v1 && v2) {
+            fb.className = 'feedback correct';
+            fb.innerText = 'Corect! Cele 3 corăbii au fost Santa Maria, Pinta și Niña!';
+        } else {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Incorect. Consultă alineatul 2 din subcapitolul 3.1!';
+        }
+    }
+
+    // EXERCIȚIUL 1.5
+    function initEx1_5() {
+        let opts = ["Adevărat", "Fals"];
+        document.getElementById('ex1_5_1').innerHTML = '<option value="">-- opțiune --</option>' + opts.map(o=>`<option value="${o}">${o}</option>`).join('');
+        document.getElementById('ex1_5_2').innerHTML = '<option value="">-- opțiune --</option>' + opts.map(o=>`<option value="${o}">${o}</option>`).join('');
+        document.getElementById('ex1_5_3').innerHTML = '<option value="">-- opțiune --</option>' + opts.map(o=>`<option value="${o}">${o}</option>`).join('');
+    }
+
+    function checkEx1_5() {
+        let v1 = document.getElementById('ex1_5_1').value === "Fals";
+        let v2 = document.getElementById('ex1_5_2').value === "Adevărat";
+        let v3 = document.getElementById('ex1_5_3').value === "Adevărat";
+
+        let fb = document.getElementById('ex1_5-feedback');
+        if(v1 && v2 && v3) {
+            fb.className = 'feedback correct';
+            fb.innerText = 'Excelent! Columb a murit crezând că a ajuns în Indii (Asia), nu că a descoperit un continent nou.';
+        } else {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Atenție la prima afirmație! Releagă paragrafele 1 și 3 din capitolul 3.1.';
+        }
+    }
+
+    // EXERCIȚIUL 2.2
+    function initEx2_2() {
+        const q1Opts = shuffle(["18 oameni", "100 oameni", "5 oameni"]);
+        const q2Opts = shuffle(["Către vest", "Către nord", "Către est"]);
+
+        let q1Html = q1Opts.map(o => `<label style="display:block"><input type="radio" name="q2_2_1" value="${o}"> ${o}</label>`).join('');
+        let q2Html = q2Opts.map(o => `<label style="display:block"><input type="radio" name="q2_2_2" value="${o}"> ${o}</label>`).join('');
+
+        document.getElementById('ex2_2_q1').innerHTML = q1Html;
+        document.getElementById('ex2_2_q2').innerHTML = q2Html;
+    }
+
+    function checkEx2_2() {
+        let ans1 = document.querySelector('input[name="q2_2_1"]:checked')?.value;
+        let ans2 = document.querySelector('input[name="q2_2_2"]:checked')?.value;
+
+        let fb = document.getElementById('ex2_2-feedback');
+        if (ans1 === "18 oameni" && ans2 === "Către vest") {
+            fb.className = 'feedback correct';
+            fb.innerText = 'Felicitări! Răspunsuri 100% corecte bazate pe mărturia lui Pigafetta!';
+        } else {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Răspuns incorect. Recitește textul din Sursa A a subcapitolului 3.2!';
+        }
+    }
+
+    // EXERCIȚIUL 2.3
+    function initEx2_3() {
+        let o1 = shuffle(["Atlantic", "Indian", "Arctic"]);
+        let o2 = shuffle(["Pacific", "Atlantic", "Indian"]);
+        let o3 = shuffle(["Filipine", "Japonia", "Madagascar"]);
+
+        document.getElementById('ex2_3_1').innerHTML = '<option value="">-- ocean --</option>' + o1.map(o=>`<option value="${o}">${o}</option>`).join('');
+        document.getElementById('ex2_3_2').innerHTML = '<option value="">-- ocean --</option>' + o2.map(o=>`<option value="${o}">${o}</option>`).join('');
+        document.getElementById('ex2_3_3').innerHTML = '<option value="">-- insule --</option>' + o3.map(o=>`<option value="${o}">${o}</option>`).join('');
+    }
+
+    function checkEx2_3() {
+        let v1 = document.getElementById('ex2_3_1').value === "Atlantic";
+        let v2 = document.getElementById('ex2_3_2').value === "Pacific";
+        let v3 = document.getElementById('ex2_3_3').value === "Filipine";
+
+        let fb = document.getElementById('ex2_3-feedback');
+        if(v1 && v2 && v3) {
+            fb.className = 'feedback correct';
+            fb.innerText = 'Perfect! Ai reconstruit traseul primei circumnavigații!';
+        } else {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Incorect. Consultă paragraful 2 al subcapitolului 3.2.';
+        }
+    }
+
+    // EXERCIȚIUL 2.4
+    let selEx2_4 = null;
+    function initEx2_4() {
+        const opts = [
+            { text: "Arhipelagul Țara de Foc", correct: true },
+            { text: "Arhipelagul Canare", correct: false },
+            { text: "Insulele Britanice", correct: false }
+        ];
+        const container = document.getElementById('ex2_4_options');
+        container.innerHTML = '';
+        shuffle(opts).forEach(o => {
+            let chip = document.createElement('div');
+            chip.className = 'option-chip';
+            chip.innerText = o.text;
+            chip.onclick = () => {
+                document.querySelectorAll('#ex2_4_options .option-chip').forEach(c => c.classList.remove('selected'));
+                chip.classList.add('selected');
+                selEx2_4 = o.correct;
+            };
+            container.appendChild(chip);
+        });
+    }
+
+    function checkEx2_4() {
+        let fb = document.getElementById('ex2_4-feedback');
+        if (selEx2_4 === null) {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Alege o opțiune!';
+            return;
+        }
+        if (selEx2_4 === true) {
+            fb.className = 'feedback correct';
+            fb.innerText = 'Bravo! Țara de Foc se află în extremitatea sudică a Americii de Sud.';
+        } else {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Incorect. Releagă textul de la 3.2!';
+        }
+    }
+
+    // EXERCIȚIUL 3.1 (DRAG AND DROP)
+    const chronoEvents = [
+        { id: "e1", text: "1492 - Cristofor Columb descoperă Insula San Salvador", year: 1492 },
+        { id: "e2", text: "1499-1504 - Amerigo Vespucci explorează America de Sud", year: 1499 },
+        { id: "e3", text: "1519-1522 - Călătoria în jurul lumii (Magellan)", year: 1519 },
+        { id: "e4", text: "1524 - Giovanni da Verrazzano cercetează țărmul Americii de Nord", year: 1524 },
+        { id: "e5", text: "Sec. XVII - Henry Hudson explorează zona New York și Fluviul Hudson", year: 1600 }
+    ];
+
+    function initDragAndDrop() {
+        const container = document.getElementById('drag-list');
+        container.innerHTML = '';
+        let shuffled = shuffle([...chronoEvents]);
+
+        shuffled.forEach(evt => {
+            let item = document.createElement('div');
+            item.className = 'drag-item';
+            item.draggable = true;
+            item.dataset.year = evt.year;
+            item.innerHTML = `<span class="drag-handle">☰</span> <span>${evt.text}</span>`;
+            
+            item.addEventListener('dragstart', () => item.classList.add('dragging'));
+            item.addEventListener('dragend', () => item.classList.remove('dragging'));
+
+            container.appendChild(item);
+        });
+
+        setupDragContainer(container);
+    }
+
+    function getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll('.drag-item:not(.dragging)')];
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    function checkDragOrder() {
+        const items = [...document.querySelectorAll('#drag-list .drag-item')];
+        let correct = true;
+        
+        for (let i = 0; i < items.length - 1; i++) {
+            let currentYear = parseInt(items[i].dataset.year);
+            let nextYear = parseInt(items[i+1].dataset.year);
+            if (currentYear > nextYear) {
+                correct = false;
+                break;
+            }
+        }
+
+        const fb = document.getElementById('drag-feedback');
+        if (correct) {
+            fb.className = 'feedback correct';
+            fb.innerText = 'Bravo! Toate evenimentele istorice au fost așezate în ordinea cronologică corectă!';
+        } else {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Ordinea nu este corectă. Mută cardurile astfel încât anii să fie în ordine crescătoare de sus în jos!';
+        }
+    }
+
+    // EXERCIȚIUL 3.2
+    function initEx3_2() {
+        let opts1 = shuffle(["America de Sud (Argentina, Brazilia)", "Țărmul estic al Americii de Nord", "Golful și Fluviul Hudson"]);
+        let opts2 = shuffle(["Țărmul estic al Americii de Nord", "America de Sud (Argentina, Brazilia)", "Golful și Fluviul Hudson"]);
+        let opts3 = shuffle(["Golful și Fluviul Hudson", "Țărmul estic al Americii de Nord", "America de Sud (Argentina, Brazilia)"]);
+
+        document.getElementById('ex3_2_1').innerHTML = '<option value="">-- alege --</option>' + opts1.map(o=>`<option value="${o}">${o}</option>`).join('');
+        document.getElementById('ex3_2_2').innerHTML = '<option value="">-- alege --</option>' + opts2.map(o=>`<option value="${o}">${o}</option>`).join('');
+        document.getElementById('ex3_2_3').innerHTML = '<option value="">-- alege --</option>' + opts3.map(o=>`<option value="${o}">${o}</option>`).join('');
+    }
+
+    function checkEx3_2() {
+        let v1 = document.getElementById('ex3_2_1').value === "America de Sud (Argentina, Brazilia)";
+        let v2 = document.getElementById('ex3_2_2').value === "Țărmul estic al Americii de Nord";
+        let v3 = document.getElementById('ex3_2_3').value === "Golful și Fluviul Hudson";
+
+        let fb = document.getElementById('ex3_2-feedback');
+        if(v1 && v2 && v3) {
+            fb.className = 'feedback correct';
+            fb.innerText = 'Excelent! Ai asociat corect fiecare explorator cu zona cercetată!';
+        } else {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Unele asocieri sunt incorecte. Verifică secțiunea 3.3 din text!';
+        }
+    }
+
+    // EXERCIȚIUL 3.3
+    function initEx3_3() {
+        let o1 = shuffle(["Franței", "Angliei", "Spaniei"]);
+        let o2 = shuffle(["nordic", "sudic", "oriental"]);
+        let o3 = shuffle(["Henry Hudson", "Amerigo Vespucci", "Cristofor Columb"]);
+
+        document.getElementById('ex3_3_1').innerHTML = '<option value="">-- stat --</option>' + o1.map(o=>`<option value="${o}">${o}</option>`).join('');
+        document.getElementById('ex3_3_2').innerHTML = '<option value="">-- pasaj --</option>' + o2.map(o=>`<option value="${o}">${o}</option>`).join('');
+        document.getElementById('ex3_3_3').innerHTML = '<option value="">-- explorator --</option>' + o3.map(o=>`<option value="${o}">${o}</option>`).join('');
+    }
+
+    function checkEx3_3() {
+        let v1 = document.getElementById('ex3_3_1').value === "Franței";
+        let v2 = document.getElementById('ex3_3_2').value === "nordic";
+        let v3 = document.getElementById('ex3_3_3').value === "Henry Hudson";
+
+        let fb = document.getElementById('ex3_3-feedback');
+        if(v1 && v2 && v3) {
+            fb.className = 'feedback correct';
+            fb.innerText = 'Foarte bine! Răspunsurile tale sunt 100% conforme cu manualul.';
+        } else {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Incorect. Releagă paragrafele din subcapitolul 3.3!';
+        }
+    }
+
+    // EXERCIȚIUL 3.4 INTEGRAT COMPLET DRAG & DROP CU PARTE CORECTĂ ȘI INTRUȘI
+    const journalFragments = [
+        { id: "j1", order: 1, text: "În 1492, am plecat din portul Palos la bordul celor trei corăbii (Santa Maria, Pinta și Niña).", isCorrect: true },
+        { id: "j2", order: 2, text: "Am navigat spre vest peste Oceanul Atlantic, sperând să găsim o rută mai scurtă către Indii.", isCorrect: true },
+        { id: "j3", order: 3, text: "După săptămâni de mers pe ocean, marinarul Rodrigo de Triana a strigat «Pământ!».", isCorrect: true },
+        { id: "j4", order: 4, text: "Am debarcat pe insula San Salvador din Bahamas și am numit locuitorii «indieni».", isCorrect: true },
+        { id: "j5", order: 99, text: "INTRUS: Am trecut prin Strâmtoarea Magellan și am ajuns după 3 ani în Insulele Filipine.", isCorrect: false },
+        { id: "j6", order: 99, text: "INTRUS: Am explorat zona orașului New York și Fluviul Hudson în numele Franței.", isCorrect: false }
+    ];
+
+    function initJournalDragDrop() {
+        const poolZone = document.getElementById('journal-pool-zone');
+        const dropZone = document.getElementById('journal-drop-zone');
+        poolZone.innerHTML = '';
+        dropZone.innerHTML = '';
+
+        let shuffled = shuffle([...journalFragments]);
+
+        shuffled.forEach(frag => {
+            let item = document.createElement('div');
+            item.className = 'drag-item';
+            item.draggable = true;
+            item.dataset.order = frag.order;
+            item.dataset.correct = frag.isCorrect;
+            item.innerHTML = `<span class="drag-handle">☰</span> <span>${frag.text}</span>`;
+            
+            item.addEventListener('dragstart', () => item.classList.add('dragging'));
+            item.addEventListener('dragend', () => item.classList.remove('dragging'));
+
+            poolZone.appendChild(item);
+        });
+
+        setupDragContainer(poolZone);
+        setupDragContainer(dropZone);
+    }
+
+    function setupDragContainer(container) {
+        container.addEventListener('dragover', e => {
+            e.preventDefault();
+            const afterElement = getDragAfterElement(container, e.clientY);
+            const draggingItem = document.querySelector('.dragging');
+            if (draggingItem) {
+                if (afterElement == null) {
+                    container.appendChild(draggingItem);
+                } else {
+                    container.insertBefore(draggingItem, afterElement);
+                }
+            }
+        });
+    }
+
+    function checkJournalDrop() {
+        const dropItems = [...document.querySelectorAll('#journal-drop-zone .drag-item')];
+        const fb = document.getElementById('ex3_4-feedback');
+
+        if (dropItems.length === 0) {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Trage fragmentele din bancă în zona de sus pentru a construi Jurnalul!';
+            return;
+        }
+
+        // Verificăm dacă sunt exact cele 4 fragmente corecte
+        let containsFalse = dropItems.some(item => item.dataset.correct === "false");
+        if (containsFalse) {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Atenție! Ai introdus un fragment greșit (intrus) care nu aparține primei călătorii a lui Columb!';
+            return;
+        }
+
+        if (dropItems.length !== 4) {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Nu ai introdus toate fragmentele istorice corecte! Reîncearcă.';
+            return;
+        }
+
+        // Verificăm ordinea logică/cronologică (1, 2, 3, 4)
+        let isOrderCorrect = true;
+        for (let i = 0; i < dropItems.length; i++) {
+            if (parseInt(dropItems[i].dataset.order) !== (i + 1)) {
+                isOrderCorrect = false;
+                break;
+            }
+        }
+
+        if (isOrderCorrect) {
+            fb.className = 'feedback correct';
+            fb.innerText = '🎉 Excelent! Ai reconstruit Jurnalul lui Cristofor Columb perfect, eliminând intrușii și respectând ordinea istorică!';
+        } else {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Fragmentele alese sunt corecte, dar ordinea lor logică este greșită. Reorganizează-le de la plecare la debarcare!';
+        }
+    }
+
+    // TEST EVALUATIV FINAL (10 ÎNTREBĂRI)
+    const quizQuestions = [
+        {
+            q: "1. Din ce oraș portuar era de origine Cristofor Columb?",
+            options: ["Genova", "Venetia", "Lisabona", "Sevilla"],
+            ans: "Genova"
+        },
+        {
+            q: "2. Care au fost cele trei corăbii folosite de Columb în prima sa călătorie din 1492?",
+            options: ["Santa Maria, Pinta și Niña", "Victoria, Trinidad și Concepcion", "San Antonio, Santiago și Victoria", "Pinta, Niña și Victoria"],
+            ans: "Santa Maria, Pinta și Niña"
+        },
+        {
+            q: "3. Cum a numit Columb prima insulă descoperită în Arhipelagul Bahamas?",
+            options: ["San Salvador", "Cuba", "Haiti", "Trinidad"],
+            ans: "San Salvador"
+        },
+        {
+            q: "4. De ce i-a numit Columb pe băștinașii din teritoriile descoperite «indieni»?",
+            options: ["Deoarece era convins că a ajuns în Indii (Asia)", "Așa se numeau ei în limba lor", "I-a numit după numele regilor Spaniei", "Dintr-o greșeală de traducere a numelui insulei"],
+            ans: "Deoarece era convins că a ajuns în Indii (Asia)"
+        },
+        {
+            q: "5. Câte corăbii au alcătuit inițial flota condusă de Fernando Magellan în 1519?",
+            options: ["5 corăbii", "3 corăbii", "10 corăbii", "1 corabie"],
+            ans: "5 corăbii"
+        },
+        {
+            q: "6. Care a fost singura corabie a lui Magellan ce s-a întors în Spania în 1522?",
+            options: ["Victoria", "Santa Maria", "Trinidad", "San Antonio"],
+            ans: "Victoria"
+        },
+        {
+            q: "7. După numele cărui navigator a fost denumit continentul America?",
+            options: ["Amerigo Vespucci", "Cristofor Columb", "Giovanni da Verrazzano", "Henry Hudson"],
+            ans: "Amerigo Vespucci"
+        },
+        {
+            q: "8. Ce renumită strâmtoare din sudul Americii a fost descoperită în timpul expediției lui Magellan?",
+            options: ["Strâmtoarea Magellan", "Strâmtoarea Bering", "Strâmtoarea Gibraltar", "Strâmtoarea Bosphor"],
+            ans: "Strâmtoarea Magellan"
+        },
+        {
+            q: "9. Ce explorator a cercetat zona actualului oraș New York, Golful și Fluviul care îi poartă numele?",
+            options: ["Henry Hudson", "Jacques Cartier", "John Cabot", "Giovanni da Verrazzano"],
+            ans: "Henry Hudson"
+        },
+        {
+            q: "10. Ce domeniu de studiu include cercetarea mărilor și oceanelor (aspecte biologice, fizice, geologice)?",
+            options: ["Oceanografia", "Cartografia", "Geologia", "Astronomia"],
+            ans: "Oceanografia"
+        }
+    ];
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+
+        quizQuestions.forEach((qObj, qIdx) => {
+            let qDiv = document.createElement('div');
+            qDiv.className = 'test-q';
+            qDiv.innerHTML = `<p><strong>${qObj.q}</strong></p>`;
+
+            let shuffledOpts = shuffle([...qObj.options]);
+            shuffledOpts.forEach(opt => {
+                let lbl = document.createElement('label');
+                lbl.style.display = 'block';
+                lbl.style.margin = '4px 0';
+                lbl.innerHTML = `<input type="radio" name="q_${qIdx}" value="${opt}"> ${opt}`;
+                qDiv.appendChild(lbl);
+            });
+
+            container.appendChild(qDiv);
+        });
+    }
+
+    function checkQuiz() {
+        let score = 0;
+        quizQuestions.forEach((qObj, qIdx) => {
+            let selected = document.querySelector(`input[name="q_${qIdx}"]:checked`);
+            if (selected && selected.value === qObj.ans) {
+                score++;
+            }
+        });
+
+        const feedback = document.getElementById('quiz-feedback');
+        if (score === quizQuestions.length) {
+            feedback.className = 'feedback correct';
+            fb.innerText = `🏆 FELICITĂRI EXCEPȚIONALE! Ai obținut punctaj maxim: ${score}/${quizQuestions.length}! Stăpânești la perfecție Lecția 3!`;
+        } else {
+            feedback.className = 'feedback incorrect';
+            feedback.innerText = `Ai obținut ${score} din ${quizQuestions.length} puncte. Releagă paragrafele unde ai greșit și încearcă din nou!`;
+        }
+    }
+
+    window.onload = () => {
+        initEx1();
+        initEx1_2();
+        initEx1_3();
+        initEx1_4();
+        initEx1_5();
+        
+        initEx2_2();
+        initEx2_3();
+        initEx2_4();
+
+        initDragAndDrop();
+        initEx3_2();
+        initEx3_3();
+        initJournalDragDrop();
+
+        initQuiz();
+        setupHideArrowListeners();
+    };
+</script>
+
+</body>
+</html>
